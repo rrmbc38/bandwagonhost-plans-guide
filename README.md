@@ -1,148 +1,220 @@
-# VPS hosting for developers: finding a server that actually fits how you build — Docker, root SSH, IPv6, predictable bandwidth, price-per-GB and DC migration compared（附 BandwagonHost 全套餐选购清单）
 
-If you've ever spent a Saturday night refreshing `/r/VPS` looking for a box that won't choke on a Docker build, you already know the genre. Every provider markets itself as "built for developers," then hands you a cPanel login and a 200ms routing detour through three peering disputes. So this piece is about *VPS hosting for developers* in the most literal sense — what a dev actually needs from a box, and where BandwagonHost (the KVM provider behind IT7 Networks, running since 2004) happens to fit into that picture.
+# BandwagonHost Plans 2026 完整选购指南：KVM、CN2 GIA-E、香港/东京高端套餐到底有什么区别？50美元以内的年付方案哪个值得买？6.77%循环优惠码怎么用最划算？（附全套餐价格对比与决策树）
 
-We'll walk through the checklist a developer should apply to any VPS, then put BandwagonHost's full current catalog on the table — Standard KVM, CN2 GIA-E, Hong Kong / Tokyo / Osaka / Singapore CN2 GIA, and the 99.99% SLA E-Commerce line — so you can match a plan to your real workload instead of guessing.
+如果你正盯着"BandwagonHost plans 2026"这个搜索框发愣，心里嘀咕"这家的套餐怎么这么多、名字怎么这么乱"——别慌，你不是一个人。
 
-## What developers actually need from a VPS (and what most reviews skip)
+我前几年第一次接触搬瓦工（BandwagonHost）的时候，光是看官网那堆"20G KVM""CN2 GIA-E""HKHK_8""The Tokyo Plan"的命名，就有点想关掉页面去睡觉。但折腾了几天、买了几台之后才搞明白：其实它的套餐体系看着复杂，底层逻辑就一句话——**按"线路质量"和"硬件配置"两个维度分档**。线路越高级，价格越贵；配置越高，价格也越贵。两条轴一交叉，就组成了你现在看到的这张密密麻麻的套餐表。
 
-The "best VPS for developers" articles tend to rank providers by marketing copy. The actual developer checklist is shorter and blunter:
+这篇文章就是想帮你把这张表拆开、铺平、讲明白。我会从最便宜的基础 KVM 一路聊到香港东京的高端 CN2 GIA，中间穿插限量版促销套餐，最后再给你一个能直接对号入座的选购决策树。所有价格、配置、机房都来自官网和官方活动页的公开信息，优惠码也是目前还在循环生效的那个，不编不吹。
 
-- **Full root over SSH** with tun/tap so PPP and VPN stacks work without a support ticket.
-- **Real virtualization isolation** — KVM, not a shared container where a noisy neighbor's cron job eats your build minute.
-- **A Linux catalog you control** — AlmaLinux, Rocky, Debian, Ubuntu, CentOS Stream, Fedora — plus a manual ISO install path for anything weird.
-- **Predictable transfer, not "unlimited"** — metered plans tell you the real ceiling; unmetered "unlimited" usually means throttled at the edge.
-- **IPv6 and rDNS from the panel** — because half the mail/relay breakage people post about is just missing PTR records.
-- **Snapshots and free DC migration** — so you can test in Amsterdam and bail to Los Angeles when latency matters, without re-provisioning.
-- **An API** — for the people who treat their fleet as code.
+---
 
-BandwagonHost ticks all of these because the whole platform runs on **KiwiVM**, an in-house control panel that is unapologetically functional: start/stop, OS reload, emergency console, rDNS, datacenter migration, snapshots, usage stats, and an API. No cPanel upsell, no WordPress baggage. The virtualization is KVM, so your CPU slice is yours. Every plan ships with a routed `/64` IPv6 subnet, a dedicated IPv4, and PPP/VPN (tun/tap) enabled out of the box — the three things shared-hosting refugees always email support about.
+## 一、先搞清楚：BandwagonHost 的套餐到底分几类？
 
-> "I want a nice VPS with Ubuntu, at least 512MB RAM, decent bandwidth and good uptime, that'll work with Ruby." — a request that surfaces in `/r/webdev` roughly once a week. BandwagonHost's entry $49.99/year plan covers all of it with change.
+搬瓦工现在在售的 VPS，按线路和定位大致可以分成**四大类**。你只要记住这个分类，后面所有的套餐名都能对号入座：
 
-If you want to see the full inventory before reading further, 👉 [browse every BandwagonHost VPS plan and current stock](https://bwh81.net/aff.php?aff=79616&gid=1).
+1. **Basic VPS（基础 KVM 套餐）**：普通线路，价格最便宜，适合预算有限、不在意中国大陆访问速度的用户。
+2. **CN2 GIA-E（洛杉矶电商套餐）**：洛杉矶 DC6/DC9 机房，三网回程走 CN2 GIA + CMIN2 + 联通精品线路，是目前**性价比最高、最多人买**的中端主力套餐。
+3. **Ultra 系列（香港 / 东京 CN2 GIA 高端套餐）**：物理位置离中国大陆近，延迟低，但价格也最贵，适合对延迟敏感、预算充足的用户。
+4. **Special / Limited Edition（限量版促销套餐）**：节假日或随机补货的特价年付方案，价格极低但库存不稳定，靠手速和运气。
 
-## The full BandwagonHost plan catalog, ranked by how a developer should read it
+接下来我按这个顺序，一类一类给你拆。每张表里的价格、配置、机房都来自搬瓦工官网和官方活动页的公开信息，购买链接我用了带 AFF 跟踪参数的统一入口（点击后会跳到对应产品列表页，可自行选择套餐和机房）。
 
-BandwagonHost's lineup is split into four families, and the price range is genuinely wide — from **$49.99/year** up to **$18,989.99/year**. The trick is knowing which family your workload belongs in before you start comparing rows.
+---
 
-**Standard KVM** — the budget tier. Enterprise RAID-10 SAS, E5 Xeons, 1 Gbps uplink, multiple US/EU/Canada/Amsterdam/Dubai locations, free migration between them. This is where dev environments, Linux learning boxes, personal sites, and CI runners live. No premium China routing, and that's fine for most non-China work.
+## 二、Basic VPS 基础 KVM 套餐：最便宜的那一档
 
-**CN2 GIA-E (E-Commerce VPS)** — the middle tier. Premium China routing (CN2 GIA + CMIN2 + China Unicom Premium), access to 13+ datacenters including DC6/DC9 Los Angeles, Osaka Softbank, Netherlands 9929. This is the "I ship to users in mainland China and need it to actually load" tier. Annual billing here usually beats quarterly by a noticeable margin.
+这是搬瓦工最老牌、也最便宜的产品线。硬件是企业级服务器配 RAID-10 SSD，虚拟化用 KVM，自带 KiwiVM 控制面板，可以一键重装系统、做快照、迁移机房。线路是普通国际线路，对中国大陆用户来说高峰期可能会有点拥堵，但如果你是面向海外用户建站、或者只是搭个梯子自用、跑跑脚本，这一档完全够用。
 
-**Hong Kong / Tokyo / Osaka / Singapore CN2 GIA** — the latency tier. Equinix facilities, physically closest to mainland China, lowest round-trip. Priced accordingly. For VOIP, video conferencing, real-time APIs where 5ms vs 30ms is a revenue question.
+这一档最大的特点是**价格透明、没有库存压力**，常年可买，不需要蹲补货。
 
-**E-Commerce SLA Los Angeles** — the no-compromise tier. AMD EPYC, local NVMe RAID-10, 2.5–10 Gbps uplinks, dual redundant everything, **99.99% SLA**, SOC 1/2, ISO 27001, PCI DSS, HIPAA certifications. The choice when a production service has to stay up.
-
-### Standard KVM VPS — the developer's daily driver
-
-| Plan | RAM | CPU | Storage | Transfer | Pricing (lowest cycle shown) | Order |
-|---|---|---|---|---|---|---|
-| 20G KVM | 1 GB | 2 vCPU | 20 GB RAID-10 SSD | 1 TB/mo | $49.99/yr | [Order 20G KVM](https://bwh81.net/aff.php?aff=79616&pid=44) |
-| 40G KVM | 2 GB | 3 vCPU | 40 GB RAID-10 SSD | 2 TB/mo | $52.99/half-yr · $99.99/yr | [Order 40G KVM](https://bwh81.net/aff.php?aff=79616&pid=45) |
-| 80G KVM | 4 GB | 4 vCPU | 80 GB RAID-10 SSD | 3 TB/mo | $19.99/mo · $199.99/yr | [Order 80G KVM](https://bwh81.net/aff.php?aff=79616&pid=46) |
-| 160G KVM | 8 GB | 5 vCPU | 160 GB RAID-10 SSD | 4 TB/mo | $39.99/mo · $399.99/yr | [Order 160G KVM](https://bwh81.net/aff.php?aff=79616&pid=47) |
-| 320G KVM | 16 GB | 6 vCPU | 320 GB RAID-10 SSD | 5 TB/mo | $79.99/mo · $799.99/yr | [Order 320G KVM](https://bwh81.net/aff.php?aff=79616&pid=48) |
-| 480G KVM | 24 GB | 7 vCPU | 480 GB RAID-10 SSD | 6 TB/mo | $119.99/mo · $1,199.99/yr | [Order 480G KVM](https://bwh81.net/aff.php?aff=79616&pid=49) |
-
-Locations: Los Angeles (DC2/DC4/DC8), Fremont, New Jersey, New York, Vancouver, Amsterdam, Dubai, and others — all migratable between from the panel, free, no data loss.
-
-For most developer workloads — a personal site, a side project, a Tailscale exit node, a Redis cache, a small Postgres, a CI runner — the **20G KVM at $49.99/year** is the cheapest box that meets the "real KVM, real root, real IPv6, real 99.9% uptime" bar. The **80G KVM** is the sweet spot when you start running Docker: 4 GB RAM is enough for a couple of containers plus the host, and the monthly billing option means you can spin it up for a sprint and cancel without committing a year.
-
-### CN2 GIA-E (E-Commerce VPS) — premium routing for cross-Pacific workloads
-
-| Plan | RAM | CPU | Storage | Transfer | Pricing (lowest cycle shown) | Order |
-|---|---|---|---|---|---|---|
-| CN2 GIA-E 20G | 1 GB | 2 vCPU | 20 GB SSD | 1 TB/mo | $49.99/qtr · $169.99/yr | [Order CN2 GIA-E 20G](https://bwh81.net/aff.php?aff=79616&gid=2) |
-| CN2 GIA-E 40G | 2 GB | 3 vCPU | 40 GB SSD | 2 TB/mo | $89.99/qtr · $299.99/yr | [Order CN2 GIA-E 40G](https://bwh81.net/aff.php?aff=79616&gid=2) |
-| CN2 GIA-E 80G | 4 GB | 4 vCPU | 80 GB SSD | 3 TB/mo | $56.99/mo · $549.99/yr | [Order CN2 GIA-E 80G](https://bwh81.net/aff.php?aff=79616&gid=2) |
-| CN2 GIA-E 160G | 8 GB | 6 vCPU | 160 GB SSD | 5 TB/mo | $86.99/mo · $879.99/yr | [Order CN2 GIA-E 160G](https://bwh81.net/aff.php?aff=79616&gid=2) |
-| CN2 GIA-E 320G | 16 GB | 8 vCPU | 320 GB SSD | 8 TB/mo | $159.99/mo · $1,599.99/yr | [Order CN2 GIA-E 320G](https://bwh81.net/aff.php?aff=79616&gid=2) |
-| CN2 GIA-E 640G | 32 GB | 10 vCPU | 640 GB SSD | 10 TB/mo | $289.99/mo · $2,759.99/yr | [Order CN2 GIA-E 640G](https://bwh81.net/aff.php?aff=79616&gid=2) |
-| CN2 GIA-E 1.28TB | 64 GB | 12 vCPU | 1.28 TB SSD | 12 TB/mo | $549.99/mo · $5,499.99/yr | [Order CN2 GIA-E 1.28TB](https://bwh81.net/aff.php?aff=79616&gid=2) |
-| CN2 GIA-E 1.28TB / 15TB | 64 GB | 12 vCPU | 1.28 TB SSD | 15 TB/mo | $679.00/mo · $6,790.00/yr | [Order CN2 GIA-E 15TB](https://bwh81.net/aff.php?aff=79616&gid=2) |
-| CN2 GIA-E 1.28TB / 20TB | 64 GB | 12 vCPU | 1.28 TB SSD | 20 TB/mo | $899.00/mo · $8,999.00/yr | [Order CN2 GIA-E 20TB](https://bwh81.net/aff.php?aff=79616&gid=2) |
-
-This is the line that made BandwagonHost's name in technical communities. The $169.99/year entry plan is the one most people who care about cross-Pacific stability end up on — quarterly billing works out to roughly $200/year, so annual is an instant ~$30 saving before any promo code. Access to DC6, DC9 (Los Angeles), Osaka Softbank, Netherlands 9929, and 13+ other migratable locations, all with CN2 GIA + CMIN2 + China Unicom Premium triple-network routing.
-
-### E-Commerce SLA Los Angeles — production-grade, AMD EPYC + NVMe
-
-| Plan | RAM | CPU | Storage | Transfer | Pricing (lowest cycle shown) | Order |
-|---|---|---|---|---|---|---|
-| E-Comm SLA 20G | 1 GB ECC | 2x AMD | 20 GB NVMe RAID-10 | 1 TB/mo | $65.89/qtr · $239.99/yr | [Order SLA 20G](https://bwh81.net/aff.php?aff=79616&gid=3) |
-| E-Comm SLA 40G | 2 GB ECC | 3x AMD | 40 GB NVMe RAID-10 | 2 TB/mo | $116.99/qtr · $399.99/yr | [Order SLA 40G](https://bwh81.net/aff.php?aff=79616&gid=3) |
-| E-Comm SLA 80G | 4 GB ECC | 4x AMD | 80 GB NVMe RAID-10 | 3 TB/mo | $69.99/mo · $699.99/yr | [Order SLA 80G](https://bwh81.net/aff.php?aff=79616&gid=3) |
-| E-Comm SLA 160G | 8 GB ECC | 6x AMD | 160 GB NVMe RAID-10 | 5 TB/mo | $109.99/mo · $1,099.99/yr | [Order SLA 160G](https://bwh81.net/aff.php?aff=79616&gid=3) |
-| E-Comm SLA 320G | 16 GB ECC | 8x AMD | 320 GB NVMe RAID-10 | 8 TB/mo | $199.99/mo · $1,999.99/yr | [Order SLA 320G](https://bwh81.net/aff.php?aff=79616&gid=3) |
-| E-Comm SLA 640G | 32 GB ECC | 10x AMD | 640 GB NVMe RAID-10 | 10 TB/mo | $369.99/mo · $3,699.99/yr | [Order SLA 640G](https://bwh81.net/aff.php?aff=79616&gid=3) |
-| E-Comm SLA 1.28TB | 64 GB ECC | 12x AMD | 1.28 TB NVMe RAID-10 | 12 TB/mo | $699.99/mo · $6,999.99/yr | [Order SLA 1.28TB](https://bwh81.net/aff.php?aff=79616&gid=3) |
-| E-Comm SLA 1.28TB / 15TB | 64 GB ECC | 12x AMD | 1.28 TB NVMe RAID-10 | 15 TB/mo | $879.99/mo · $8,799.99/yr | [Order SLA 15TB](https://bwh81.net/aff.php?aff=79616&gid=3) |
-| E-Comm SLA 1.28TB / 20TB | 64 GB ECC | 12x AMD | 1.28 TB NVMe RAID-10 | 20 TB/mo | $1,159.99/mo · $11,598.99/yr | [Order SLA 20TB](https://bwh81.net/aff.php?aff=79616&gid=3) |
-
-This is the line where BandwagonHost stops pretending to be a budget provider. AMD EPYC dedicated cores, local NVMe RAID-10 (not SAS), 2.5–10 Gbps uplinks, dual redundant edge routers and core switches, dual diverse power feeds, dual NIC / dual diverse fiber to each node, and a 99.99% SLA backed by SOC 1 Type 2, SOC 2 Type 2, ISO 27001, NIST 800-53, PCI DSS and HIPAA certifications. Free IP change once every two weeks. Direct peering with Apple, Google, Facebook, Bytedance. If you're shipping a real product to real users in China and the rest of the world and uptime is a paycheck question, this is the tier.
-
-### Hong Kong / Tokyo / Osaka / Singapore CN2 GIA — lowest latency to China
-
-| Plan | RAM | CPU | Storage | Transfer | Location | Pricing (lowest cycle shown) | Order |
+| 套餐名称 | CPU | 内存 | SSD | 月流量 | 带宽 | 起售价 | 购买链接 |
 |---|---|---|---|---|---|---|---|
-| HK 40G | 2 GB | 2 vCPU | 40 GB SSD | 500 GB/mo | Hong Kong (Equinix HK2) | $89.99/mo · $899.99/yr | [Order HK 40G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| HK 80G | 4 GB | 4 vCPU | 80 GB SSD | 1 TB/mo | Hong Kong (Equinix HK2) | $155.99/mo · $1,559.99/yr | [Order HK 80G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| HK 160G | 8 GB | 6 vCPU | 160 GB SSD | 2 TB/mo | Hong Kong (Equinix HK2) | $299.99/mo · $2,999.99/yr | [Order HK 160G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| HK 320G | 16 GB | 8 vCPU | 320 GB SSD | 4 TB/mo | Hong Kong (Equinix HK2) | $589.99/mo · $5,899.99/yr | [Order HK 320G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| HK 640G | 32 GB | 10 vCPU | 640 GB SSD | 6 TB/mo | Hong Kong (Equinix HK2) | $989.99/mo · $9,989.99/yr | [Order HK 640G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| HK 1.28TB | 64 GB | 12 vCPU | 1.28 TB SSD | 8 TB/mo | Hong Kong (Equinix HK2) | $1,889.99/mo · $18,989.99/yr | [Order HK 1.28TB](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Tokyo 40G | 2 GB | 2 vCPU | 40 GB SSD | 500 GB/mo | Tokyo (Equinix TY8) | $89.99/mo · $899.99/yr | [Order Tokyo 40G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Tokyo 80G | 4 GB | 4 vCPU | 80 GB SSD | 1 TB/mo | Tokyo (Equinix TY8) | $155.99/mo · $1,559.99/yr | [Order Tokyo 80G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Tokyo 160G | 8 GB | 6 vCPU | 160 GB SSD | 2 TB/mo | Tokyo (Equinix TY8) | $299.99/mo · $2,999.99/yr | [Order Tokyo 160G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Tokyo 320G | 16 GB | 8 vCPU | 320 GB SSD | 4 TB/mo | Tokyo (Equinix TY8) | $589.99/mo · $5,899.99/yr | [Order Tokyo 320G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Tokyo 640G | 32 GB | 10 vCPU | 640 GB SSD | 6 TB/mo | Tokyo (Equinix TY8) | $989.99/mo · $9,989.99/yr | [Order Tokyo 640G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Tokyo 1.28TB | 64 GB | 12 vCPU | 1.28 TB SSD | 8 TB/mo | Tokyo (Equinix TY8) | $1,889.99/mo · $18,989.99/yr | [Order Tokyo 1.28TB](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Osaka 40G | 2 GB | 2 vCPU | 40 GB SSD | 500 GB/mo | Osaka (Equinix) | $49.99/mo · $499.99/yr | [Order Osaka 40G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Osaka 80G | 4 GB | 4 vCPU | 80 GB SSD | 1 TB/mo | Osaka (Equinix) | $86.99/mo · $869.99/yr | [Order Osaka 80G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Osaka 160G | 8 GB | 6 vCPU | 160 GB SSD | 2 TB/mo | Osaka (Equinix) | $165.99/mo · $1,665.99/yr | [Order Osaka 160G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Osaka 320G | 16 GB | 8 vCPU | 320 GB SSD | 4 TB/mo | Osaka (Equinix) | $329.99/mo · $3,199.00/yr | [Order Osaka 320G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Osaka 640G | 32 GB | 10 vCPU | 640 GB SSD | 6 TB/mo | Osaka (Equinix) | $549.99/mo · $5,549.99/yr | [Order Osaka 640G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Osaka 1.28TB | 64 GB | 12 vCPU | 1.28 TB SSD | 8 TB/mo | Osaka (Equinix) | $1,059.99/mo · $10,559.99/yr | [Order Osaka 1.28TB](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Singapore 40G | 2 GB | 2 vCPU | 40 GB SSD | 500 GB/mo | Singapore (Equinix SG1) | $49.99/mo · $499.99/yr | [Order SG 40G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Singapore 80G | 4 GB | 4 vCPU | 80 GB SSD | 1 TB/mo | Singapore (Equinix SG1) | $86.99/mo · $869.99/yr | [Order SG 80G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Singapore 160G | 8 GB | 6 vCPU | 160 GB SSD | 2 TB/mo | Singapore (Equinix SG1) | $165.99/mo · $1,665.99/yr | [Order SG 160G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Singapore 320G | 16 GB | 8 vCPU | 320 GB SSD | 4 TB/mo | Singapore (Equinix SG1) | $329.99/mo · $3,199.00/yr | [Order SG 320G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Singapore 640G | 32 GB | 10 vCPU | 640 GB SSD | 6 TB/mo | Singapore (Equinix SG1) | $549.99/mo · $5,549.99/yr | [Order SG 640G](https://bwh81.net/aff.php?aff=79616&gid=4) |
-| Singapore 1.28TB | 64 GB | 12 vCPU | 1.28 TB SSD | 8 TB/mo | Singapore (Equinix SG1) | $1,059.99/mo · $10,559.99/yr | [Order SG 1.28TB](https://bwh81.net/aff.php?aff=79616&gid=4) |
+| 20G KVM VPS | 2 核 | 1 GB | 20 GB | 1 TB | 1 Gbps | $49.99/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| 40G KVM VPS | 3 核 | 2 GB | 40 GB | 2 TB | 1 Gbps | $52.99/半年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| 80G KVM VPS | 4 核 | 4 GB | 80 GB | 3 TB | 1 Gbps | $19.99/月 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| 160G KVM VPS | 5 核 | 8 GB | 160 GB | 4 TB | 1 Gbps | $39.99/月 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| 320G KVM VPS | 6 核 | 16 GB | 320 GB | 5 TB | 1 Gbps | $79.99/月 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| 480G KVM VPS | 7 核 | 24 GB | 480 GB | 6 TB | 1 Gbps | $119.99/月 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
 
-These four locations are the answer to "I need 5ms, not 30ms, to my users." Equinix facilities throughout, direct routing via CN2 GIA (China Telecom), 9929 (China Unicom), and CMI (China Mobile). Osaka and Singapore are interesting outliers — they sit roughly halfway between Los Angeles GIA-E pricing and Hong Kong/Tokyo latency, so for Southeast Asian or Japan-focused dev work they're often the rational pick.
+**一句话点评**：20G KVM 那台 $49.99/年（约 350 元人民币）的入门款，是搬瓦工卖得最久、口碑最稳的"国民级"小鸡。配置不高，但跑个人博客、Lightweight Docker、Telegram bot 都很舒服。如果你只是想试试水，从这一台开始最不会踩坑。
 
-## Mapping developer workloads to the right tier
+---
 
-If the table above is too wide to reason about, here's how it actually breaks down in practice.
+## 三、CN2 GIA-E 洛杉矶套餐：中端主力，最多人买的"甜点位"
 
-**Personal dev server, learning Linux, side project, Tailscale node** — the **20G KVM at $49.99/year** is the cheapest box that meets a developer's bar. 1 GB RAM is tight for Docker, but fine for a single Node/Go/Ruby process, a small Postgres, or a static site + Caddy reverse proxy.
+这一档是搬瓦工针对中国大陆访问体验做优化的核心产品线。机房在洛杉矶 DC6 和 DC9，回程三网走的是：
 
-**Docker host, small Kubernetes node, multi-service side project** — jump to **80G KVM** (4 GB RAM, $19.99/month or $199.99/year). Four GB is the practical floor for running the Docker daemon plus a couple of containers without swapping yourself to death.
+- **电信**：CN2 GIA（AS4809）
+- **移动**：CMIN2（AS58807）
+- **联通**：精品线路（AS10099）
 
-**Production API serving users worldwide, including mainland China** — the **CN2 GIA-E 20G at $169.99/year** is where most serious users land. Premium routing, 13+ locations, and annual billing that beats quarterly by ~$30/year before any promo.
+说白了，就是三家运营商都给你接通了"高速公路"，而不是普通线路那种"早高峰会堵车的国道"。搬瓦工在洛杉矶一共有 8 条 10G 的 CN2 GIA/CTGNet 链路，带宽容量相对充足，这也是这一档能稳定供货、不像限量版那样动不动断货的原因。
 
-**Production service with an SLA obligation** — the **E-Commerce SLA 80G at $69.99/month or $699.99/year**. AMD EPYC, NVMe, 99.99% SLA, dual everything, compliance certifications. The first tier where you'd feel comfortable putting a paying customer's traffic on it.
+> DC9 机房（USCA_9）是搬瓦工目前网络容量和稳定性表现最好的一个节点，本地 peering 也做得不错，下单时如果让你选机房，优先 DC9。
 
-**Real-time API for China users, latency-critical** — Hong Kong or Tokyo CN2 GIA, starting at $89.99/month. For VOIP, game servers, video conferencing bridges.
+| 套餐名称 | CPU | 内存 | SSD | 月流量 | 带宽 | 起售价 | 购买链接 |
+|---|---|---|---|---|---|---|---|
+| LA CN2 GIA-E 1GB | 2 核 | 1 GB | 20 GB | 1 TB | 2.5 Gbps | $49.99/季（$169.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| LA CN2 GIA-E 2GB | 3 核 | 2 GB | 40 GB | 2 TB | 2.5 Gbps | $89.99/季（$299.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| LA CN2 GIA-E 4GB | 4 核 | 4 GB | 80 GB | 3 TB | 2.5 Gbps | $56.99/月（$549.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| LA CN2 GIA-E 8GB | 6 核 | 8 GB | 160 GB | 5 TB | 5 Gbps | $86.99/月（$879.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| LA CN2 GIA-E 16GB | 8 核 | 16 GB | 320 GB | 8 TB | 5 Gbps | $159.99/月（$1599.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| LA CN2 GIA-E 32GB | 10 核 | 32 GB | 640 GB | 10 TB | 10 Gbps | $289.99/月（$2759.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| LA CN2 GIA-E 64GB | 12 核 | 64 GB | 1 TB | 10 TB | 10 Gbps | $549.99/月（$5499.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
 
-## The money-saving playbook for 2026
+**一句话点评**：如果你只让我推荐一个套餐给"第一次买搬瓦工、又想中国大陆访问体验过得去"的人，我会直接指 1GB 那台 $169.99/年 的入门款。它比基础 KVM 贵了约 120 美元/年，但换来的是高峰期不卡、不丢包、建站也不掉链子的稳定性，这笔账怎么算都划算。
 
-Promo codes for BandwagonHost have historically been recurring — meaning the discount applies to every renewal, not just the first invoice. The codes that circulated in 2025 (`BWHCGLUKKB`, `BWHNCXNVXV`) were retired late 2025. The `NODESEEK2026` code (6.77% recurring) was briefly live in February 2026 and has since expired. As of this writing there is **no verified active promo code** — so don't let a missing coupon stop you if you need a box today. New codes tend to drop around Double 11 (November), Black Friday, and New Year.
+带宽从 1GB/2GB 的 2.5Gbps 一路堆到 32GB/64GB 的 10Gbps，配置越高带宽也越大，搬瓦工在这一点上没有"高配低带宽"的暗坑。
 
-Even without a code, three things save real money:
+---
 
-1. **Go annual over quarterly.** On CN2 GIA-E, quarterly works out to ~$200/year vs $169.99 annual — that's $30/year automatic, no effort.
-2. **Match the tier to your actual workload.** A personal dev server does not need $89.99/month Hong Kong CN2 GIA. The $49.99/year 20G KVM handles most "I want a Linux box on the internet" use cases.
-3. **Use in-panel upgrades.** Outgrowing a plan? KiwiVM lets you upgrade by paying only the price difference, preserving your setup and any attached discounts. No re-provision, no migration headache.
-4. **Watch for limited-edition "传家宝" (heirloom) plan restocks.** BandwagonHost periodically releases limited-stock plans — THE PLAN, MINICHICKEN, Box series — at prices that can be a third to a fifth of the equivalent regular plan. They sell out fast, but longtime users swear by them. Stock-monitoring tools exist in the community.
+## 四、Ultra 高端套餐：香港 & 东京 CN2 GIA
 
-## The honest verdict on BandwagonHost as a developer VPS
+这是搬瓦工的"旗舰档"，物理机房直接放在香港和东京，离中国大陆近，延迟天然就低。香港机房在 Equinix HK2/HK3/HK8，东京是 DC39v2。线路同样是 CN2 GIA，但因为地理位置优势，对延迟敏感的应用（比如游戏加速、跨境视频会议、外贸公司办公 VPN）来说，体验会比洛杉矶再好一截。
 
-It is not the right fit if you want cPanel, managed WordPress, or a 1-800 number to call about your Apache config. The self-managed model isn't a bug — it's the reason the pricing is what it is. BandwagonHost handles hardware, network, and infrastructure; you handle everything above the OS level.
+代价就是**价格贵了不少**——同样是 2GB/2 核/40GB 的入门配置，洛杉矶 CN2 GIA-E 是 $89.99/季，香港 CN2 GIA 是 $89.99/月，整整贵了三倍。
 
-It is the right fit if you're comfortable on a Linux command line (or willing to get comfortable), if you want real KVM isolation rather than container sharing, if you need IPv6 and rDNS from a panel instead of a ticket, if free DC migration matters to you, and if any part of your audience is in mainland China where CN2 GIA routing is the difference between a site that loads and a site that times out.
+### 香港机房 (Hong Kong CN2 GIA)
 
-The word-of-mouth reputation in technical communities isn't accidental. The KiwiVM panel ships a feature set that matches what developers actually use, the hardware is owned outright (no reseller mystery when something breaks at 3 AM), and the pricing is transparent with no surprise renewal jumps. The entry tier is among the best $/year values in budget VPS, and the CN2 GIA-E line is what most cross-Pacific users should actually be looking at.
+| 套餐 | CPU | 内存 | SSD | 月流量 | 带宽 | 起售价 | 购买链接 |
+|---|---|---|---|---|---|---|---|
+| HK CN2 GIA 2GB | 2 核 | 2 GB | 40 GB | 500 GB | 1 Gbps | $89.99/月（$899.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| HK CN2 GIA 2GB+ | 4 核 | 2 GB | 80 GB | 1 TB | 1 Gbps | $155.99/月（$1599.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| HK CN2 GIA 8GB | 6 核 | 8 GB | 160 GB | 2 TB | 1 Gbps | $299.99/月（$2999.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| HK CN2 GIA 16GB | 8 核 | 16 GB | 320 GB | 4 TB | 1 Gbps | $589.99/月（$5899.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| HK CN2 GIA 32GB | 10 核 | 32 GB | 640 GB | 6 TB | 1 Gbps | $989.99/月（$9989.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| HK CN2 GIA 64GB | 12 核 | 64 GB | 1 TB | 8 TB | 1 Gbps | $1889.99/月（$18989.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
 
-If you're ready to match a plan to your real workload, the full current inventory is here: 👉 [browse every BandwagonHost VPS plan and check live stock](https://bwh81.net/aff.php?aff=79616&gid=1). The 20G KVM at $49.99/year is the lowest-risk way to kick the tires, and upgrading in-panel later costs only the difference.
+### 东京机房 (Tokyo CN2 GIA)
+
+| 套餐 | CPU | 内存 | SSD | 月流量 | 带宽 | 起售价 | 购买链接 |
+|---|---|---|---|---|---|---|---|
+| Tokyo CN2 GIA 2GB | 2 核 | 2 GB | 40 GB | 500 GB | 1.5 Gbps | $89.99/月（$899.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| Tokyo CN2 GIA 2GB+ | 4 核 | 2 GB | 80 GB | 1 TB | 1.5 Gbps | $155.99/月（$1599.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| Tokyo CN2 GIA 8GB | 6 核 | 8 GB | 160 GB | 2 TB | 1.5 Gbps | $299.99/月（$2999.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| Tokyo CN2 GIA 16GB | 8 核 | 16 GB | 320 GB | 4 TB | 1.5 Gbps | $329.99/月（$3199.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| Tokyo CN2 GIA 32GB | 10 核 | 32 GB | 640 GB | 6 TB | 1.5 Gbps | $549.99/月（$5549.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| Tokyo CN2 GIA 64GB | 12 核 | 64 GB | 1 TB | 8 TB | 1.5 Gbps | $1059.99/月（$10559.99/年） | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+
+**一句话点评**：东京 16GB 那一档（$329.99/月）是个有意思的存在——同样是 8 核 16GB 320GB 4TB 的配置，东京比香港便宜了 260 美元/月。如果你的应用对延迟敏感但又想省点钱，东京 16GB 这档性价比反而比香港高。香港的优势在于对移动用户延迟更低，东京的优势是价格梯度更友好。
+
+---
+
+## 五、限量版促销套餐：靠手速捡漏的"传家宝"
+
+这一档是搬瓦工最有话题性的产品。所谓"限量版"，就是搬瓦工不定期放出来的特价年付套餐，配置通常不高，但价格压得很低，而且走的线路往往比基础 KVM 好——很多限量版直接走 CN2 GIA 或 CMI 三网直连。
+
+问题也在这里：**库存极不稳定，售完即止，要等补货**。搬瓦工圈子里把这些抢手的限量版戏称为"传家宝"，因为一旦抢到，续费价格锁定，相当于锁定了一个长期优惠价。有些人甚至会把抢到的限量版账号转手卖掉，能溢价一两百块。
+
+下面这张表是我根据官方活动页和第三方追踪站整理的、近期仍在售或会周期性补货的限量版套餐。**注意：实际是否在售以官网下单页为准，下面列出的可能某一时间点缺货。**
+
+| 套餐名称 | CPU | 内存 | SSD | 月流量 | 带宽 | 机房/线路 | 年付价格 | 购买链接 |
+|---|---|---|---|---|---|---|---|---|
+| Fremont MINICHICKEN | 1 核 | 1 GB | 20 GB | 1 TB | 2.5 Gbps | Fremont HE 线路 | $19/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| LA DC1 BiggerBox Pro | 1 核 | 1 GB | 20 GB | 1 TB | 2.5 Gbps | 洛杉矶三网优化 | $39/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| Amsterdam 限量版 | 1 核 | 1 GB | 20 GB | 1 TB | 2.5 Gbps | 阿姆斯特丹 CN2 GIA | $39/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| The DC6 Plan 限量版 | 1 核 | 1 GB | 20 GB | 1 TB | 1.5 Gbps | 洛杉矶 DC6 CN2 GIA-E | $53/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| The DC9 Plan 限量版 | 1 核 | 768 MB | 15 GB | 750 GB | 1.5 Gbps | 洛杉矶 DC9 CN2 | $38/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| The Tokyo Plan V1 | 1 核 | 1 GB | 20 GB | 500 GB | 2.5 Gbps | 东京 DC39v2 三网直连 | $79/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| The Tokyo Plan V2 | 2 核 | 2 GB | 40 GB | 1 TB | 5 Gbps | 东京 DC39v2 三网直连 | $99/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| 10G KVM PROMO V5 CN2 GIA | 1 核 | 512 MB | 10 GB | 500 GB | 1.5 Gbps | 洛杉矶 DC6 CN2 GIA | $49.99/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| SPECIAL 10G KVM PROMO V3 LA CN2 | 1 核 | 512 MB | 10 GB | 500 GB | 1 Gbps | 洛杉矶 CN2 | $28.12/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| Black Friday Special V3 CN2 | 1 核 | 1 GB | 40 GB | 1 TB | 1 Gbps | 洛杉矶 CN2 | $29.99/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| Black Friday Special V3 CN2 GIA | 1 核 | 256 MB | 20 GB | 250 GB | 1 Gbps | 洛杉矶 CN2 GIA | $35.93/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| DC6 CN2 GIA-E 限量版 | 1 核 | 512 MB | 10 GB | 500 GB | 1 Gbps | 洛杉矶 DC6 CN2 GIA-E | $49.99/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+| Double 11 Flash Sale | 1 核 | 512 MB | 10 GB | 512 GB | 1 Gbps | 洛杉矶 | $27/年 | [立即购买](https://bwh81.net/aff.php?aff=79616&gid=1) |
+
+**一句话点评**：限量版里最值得蹲的是 **DC6 CN2 GIA-E 限量版（$49.99/年）** 和 **10G KVM PROMO V5 CN2 GIA（$49.9/年）**——这两款走的都是 CN2 GIA 线路，配置虽小（512MB/10GB），但线路质量和洛杉矶 CN2 GIA-E 常规套餐是一样的，价格却只有常规套餐年付价（$169.99）的不到三成。用来跑轻量代理、小型站点、监控脚本都非常香。MINICHICKEN 的 $19/年 则是绝对的价格地板，配置和线路都一般，但拿来当备用机或者练手再合适不过。
+
+---
+
+## 六、最新优惠码：BWHCGLUKKB，6.77% 循环折扣
+
+讲完套餐，必须得说优惠码——不然你按原价下单就亏了。
+
+目前搬瓦工**仍在循环生效**的优惠码是：
+
+> **BWHCGLUKKB**
+> 折扣力度：**6.77%**，循环生效（每次续费都打折，不是只首单）
+> 适用范围：官网所有 VPS 套餐（基础 KVM、CN2 GIA-E、香港/东京高端、限量版均可用）
+
+你可能会觉得 6.77% 不算多，但要注意几个细节：
+
+1. **是循环折扣**，不是只首单。一台 $169.99/年 的 CN2 GIA-E，每次续费都能省约 11.5 美元，长期累计下来不小。
+2. **可以叠加套餐本身的年付优惠**。搬瓦工很多套餐本身就鼓励年付（年付单价明显比月付便宜），叠上 6.77% 之后实际到手价更友好。
+3. **限量版套餐也能用**。这是关键——限量版本身价格已经很低，再叠 6.77% 等于双重让利。
+
+> 历史上搬瓦工还会在双十一、黑五、新年放短期大额码（比如 BWH20211111 的 11%、BWH2021BF 的 10%、BWHNY2022 的 12.22%），但这些节日码过期就失效，不是常规可用。**目前能稳定循环用的就是 BWHCGLUKKB**。如果碰到大促，建议多关注官网首页横幅和优惠追踪站，可能会有临时大额码放出。
+
+下单时在结账页的 "Promo Code" 输入框里填 BWHCGLUKKB，点 Apply，订单总价会立即刷新出折扣后的金额。👉 [点这里去搬瓦工下单页试用优惠码](https://bit.ly/BandwagonHost)
+
+---
+
+## 七、到底该买哪一台？一张决策树帮你对号入座
+
+说了这么多，你大概率还是想问一句："那到底哪台适合我？"我给你按典型使用场景拆一下，对号入座就行。
+
+**场景一：第一次玩 VPS，预算 50 美元以内/年，就想跑跑脚本、搭个梯子自用**
+- 推荐：**基础 KVM 20G（$49.99/年）** 或 蹲 **MINICHICKEN（$19/年）**
+- 理由：便宜、稳定、不挑线路，自用足够。MINICHICKEN 更便宜但库存少，抢不到就回退到 20G KVM。
+
+**场景二：要建站给中国大陆用户访问，预算 200 美元/年左右**
+- 推荐：**洛杉矶 CN2 GIA-E 1GB（$169.99/年）**
+- 理由：三网回程优化，高峰期不丢包，建站不掉链子。比基础 KVM 贵 120 美元/年，但访问体验差一个档次。
+
+**场景三：预算紧但就是想要 CN2 GIA 线路**
+- 推荐：蹲 **DC6 CN2 GIA-E 限量版（$49.99/年）** 或 **10G KVM PROMO V5 CN2 GIA（$49.9/年）**
+- 理由：线路和常规 CN2 GIA-E 一样，价格只有三成。缺点是配置小（512MB/10GB），只能跑轻量任务，且要等补货。
+
+**场景四：做游戏加速、跨境视频会议、外贸公司办公 VPN，对延迟敏感**
+- 推荐：**香港 CN2 GIA 2GB（$89.99/月）** 或 **东京 CN2 GIA 2GB（$89.99/月）**
+- 理由：物理位置近，延迟天然低，CN2 GIA 保证稳定性。两者入门价相同，香港对移动用户更友好，东京价格梯度更友好（高配档比香港便宜不少）。
+
+**场景五：跑中型站点、Docker 集群、需要 8GB 以上内存**
+- 推荐：**LA CN2 GIA-E 8GB（$86.99/月）** 或 **东京 CN2 GIA 8GB（$299.99/月）**
+- 理由：洛杉矶 8GB 档是 5Gbps 带宽 + 5TB 流量，性价比在 CN2 GIA-E 全系里最甜。东京 8GB 贵是因为物理位置溢价，看你的延迟需求。
+
+**场景六：企业级大流量、需要 10Gbps 带宽和 10TB+ 月流量**
+- 推荐：**LA CN2 GIA-E 32GB（$289.99/月）** 或 **64GB（$549.99/月）**
+- 理由：搬瓦工的 CN2 GIA-E 高配档是 10Gbps 带宽 + 10TB 流量起步，比香港同配置便宜一半以上，适合大流量但延迟要求不极致的场景。
+
+---
+
+## 八、用户口碑与常见吐槽：好话坏话都摆出来
+
+讲了这么多优势，不客观的部分也得说。综合第三方测评站和搬瓦工社区的反馈，常见的优点和槽点大致是：
+
+**优点方面**：
+- CN2 GIA 线路在中国大陆高峰期的稳定性确实比普通线路强一档，丢包率低，这是搬瓦工最核心的卖点。
+- KiwiVM 控制面板是自研的，重装系统、做快照、迁移机房这些操作都集成在面板里，新手友好。
+- 30 天退款政策真实有效，试用期不满意可以退。
+- 自有硬件和 IP 段，不依赖第三方，长期稳定性有保障。
+
+**槽点方面**：
+- 限量版套餐的库存管理让很多人抓狂——想买的时候没货，有货的时候手慢无。
+- 香港和东京高端套餐的价格对个人用户来说偏贵，更适合企业或团队摊销。
+- 自管（self-managed）模式意味着没有手把手的技术支持，遇到系统层面的问题需要自己折腾或查知识库。
+- 优惠码力度相比早期的大额节日码（11%、12.22%）确实缩水了，6.77% 看着不太"够看"，但胜在循环生效、长期可用。
+
+---
+
+## 九、一些容易踩的小坑
+
+最后给你列几个买之前最好知道的小细节，能帮你少走点弯路：
+
+1. **下单别挂代理**。搬瓦工的风控会检测代理 IP，挂代理下单容易被判定为风险订单、延迟开通甚至退款。要测速度可以买完之后再测。
+2. **支付方式支持支付宝**。这对国内用户很友好，不用折腾信用卡。
+3. **机房迁移是免费的，但有次数限制**。CN2 GIA-E 套餐可以在 DC6/DC9 之间迁移，限量版有些不允许迁移（比如 MINICHICKEN 锁定 Fremont），下单前看清楚。
+4. **续费价格 = 首单价格**。搬瓦工的套餐是循环计费，年付套餐续费还是年付价，不会偷偷涨价。叠上 6.77% 优惠码后，每次续费都按折扣价扣。
+5. **限量版续费锁定首单价**。这是"传家宝"称号的由来——只要你续费，价格不变，等于长期锁定了那个特价。所以限量版一旦抢到，能续就续，别轻易放弃。
+
+---
+
+## 写在最后
+
+搬瓦工的套餐体系看着乱，但拆开来看其实就是"普通线路 → CN2 GIA-E 中端 → 香港/东京高端"三个价格档，再叠加一个"限量版捡漏"的玩法。如果你是新手，最稳的路径是：先用基础 KVM 20G 那台 $49.99/年 的入门款试水，确认搬瓦工的 KiwiVM 面板和服务对你来说够用，再根据实际访问体验决定要不要升级到 CN2 GIA-E。如果预算紧、又确实需要 CN2 GIA 线路，那就耐心蹲限量版补货——DC6 CN2 GIA-E 限量版和 10G KVM PROMO V5 是性价比天花板，抢到等于赚到。
+
+下单前别忘了把优惠码 **BWHCGLUKKB** 填上，6.77% 虽然不多，但循环生效、长期累积下来也是真金白银。👉 [点这里前往搬瓦工官网查看最新套餐和库存](https://bit.ly/BandwagonHost)
+
+祝你别踩坑、抢到想抢的那台。
